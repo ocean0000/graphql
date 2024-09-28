@@ -8,9 +8,14 @@ import { MongooseModule } from '@nestjs/mongoose';
 
 
 @Module({
-  imports: [MongooseModule.forRoot('mongodb://localhost:27017/graphql'), UsersModule, GraphQLModule.forRoot<ApolloDriverConfig>({
+  imports: [MongooseModule.forRoot('mongodb://localhost:27017/graphql'), 
+    UsersModule,
+     GraphQLModule.forRoot<ApolloDriverConfig>({
     autoSchemaFile: "schema.gql",
     driver: ApolloDriver,
+    formatError: (error) => {
+      return {message: error.message}
+    }
     
   })],
   controllers: [AppController],

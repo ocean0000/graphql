@@ -4,7 +4,8 @@ import { UpdateUserInput } from './dto/update-user.input';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Users } from './database/users.schema';
-import { UsersModule } from './users.module';
+import { GraphQLError } from 'graphql';
+import { Extensions } from '@nestjs/graphql';
 
 
 
@@ -23,31 +24,29 @@ export class UsersService {
 
   findOne(id: String) {
     return this.userModel.findById(id)
-    .then((data) => {
-      if(data === null) {
-        throw new NotFoundException("User not found")
-      }
-      return data
-    })
     .catch((error) => {
-      throw new NotFoundException("User not found")
+      throw new GraphQLError("không tìm thấy "
+       
+      )
     })
   }
 
 
   findByName(name: String) {
-    return this.userModel.findOne({name: name})
+    return this.userModel.findOne({ name: name })
     .then((data) => {
-   
-      if(data === null) {
-        throw new NotFoundException("User not found by name ")
+        if (!data) {
+            throw new GraphQLError("không tìm thấy")
+        }
+        return data;
       }
-      return data
-    })
-    .catch((error) => {
-      throw new NotFoundException("User not found by name ")
-    })
-  }
+    )
+   
+
+
+}
+    
+  
 
   update(id: String, updateUserInput: UpdateUserInput) {
    return this.userModel.findByIdAndUpdate(id, updateUserInput,{new:true})
