@@ -5,6 +5,7 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { UsersModule } from './users/users.module';
 import { MongooseModule } from '@nestjs/mongoose';
+import { GraphQLError } from 'graphql';
 
 
 @Module({
@@ -13,9 +14,14 @@ import { MongooseModule } from '@nestjs/mongoose';
      GraphQLModule.forRoot<ApolloDriverConfig>({
     autoSchemaFile: "schema.gql",
     driver: ApolloDriver,
-    formatError: (error) => {
-      return {message: error.message}
+    formatError: (error: GraphQLError) => {
+      return {
+        message: error.message,
+        code : error.extensions.status
+      }
     }
+    
+    
     
   })],
   controllers: [AppController],

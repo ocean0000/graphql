@@ -19,12 +19,12 @@ export class UsersResolver {
   }
 
   @Query(() => User, { name: 'one_user' })
-  findOne(@Args('id', { type: () => String }) id: string) {
+  findOne(@Args('id') id: string) {
     return this.usersService.findOne(id);
   }
 
   @Query( ()=> User, {name : "name_user"})
-  findByName(@Args('name' ) name: string){
+  findByName(@Args('name' ) name :string  ){
     return this.usersService.findByName(name);
   }
 
@@ -34,7 +34,7 @@ export class UsersResolver {
   }
 
   @Mutation(() => User)
-  removeUser(@Args('id', { type: () => String }) id: string) {
+  removeUser(@Args('id') id: string) {
     return this.usersService.remove(id);
   }
 }
